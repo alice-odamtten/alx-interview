@@ -17,11 +17,20 @@ def validUTF8(data) -> bool:
     data = iter(data)
 
     for holder in data:
-        leadbit = bin(holder).index('1')
-        if leadbit not in [0, 2, 3, 4]:
-            return False
-        for _ in range(leadbit - 1):
+        lead_bit_count = bin(holder).index('1')  
+        if lead_bit_count == 0:  
+            length = 1
+        elif lead_bit_count == 2: 
+            length = 2
+        elif lead_bit_count == 3:  
+            length = 3
+        elif lead_bit_count == 4:  
+            length = 4
+        else:
+            return False  
+
+        for _ in range(length - 1):
             after = next(data, 0)
             if after == 0 or after >> 6 != 0b10:
-                return False
+                return False  
     return True
