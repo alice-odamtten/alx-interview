@@ -18,7 +18,7 @@ def validUTF8(data) -> bool:
 
     for holder in data:
         leadbit = checklead(holder)
-        if leadbit not in [0, 1, 2, 3, 4]:
+        if leadbit not in [0, 2, 3, 4]:
             return False
         for _ in range(leadbit - 1):
             after = next(data, 0)
