@@ -15,7 +15,6 @@ def validUTF8(data) -> bool:
     '''Return: True if data is a valid
        UTF-8 encoding, else return False'''
     data = iter(data)
-
     for holder in data:
         leadbit = checklead(holder)
         if leadbit not in [1, 2, 3, 4]:
