@@ -3,12 +3,12 @@
    data set represents a valid UTF-8 encoding'''
 
 
-def checklead(byte):
-    '''checks leading byte'''
+'''def checklead(byte):
+    #checks leading byte
     for i in range(8):
         if byte >> (7 - i) == 0b11111111 >> (7 - i) & ~1:
             return i
-    return 8
+    return 8'''
 
 
 def validUTF8(data) -> bool:
@@ -17,8 +17,8 @@ def validUTF8(data) -> bool:
     data = iter(data)
 
     for holder in data:
-        leadbit = checklead(holder)
-        if leadbit not in [1, 2, 3, 4]:
+        leadbit = bin(holder).index('1')
+        if leadbit not in [0, 2, 3, 4]:
             return False
         for _ in range(leadbit - 1):
             after = next(data, 0)
