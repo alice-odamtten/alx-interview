@@ -1,21 +1,41 @@
 #!/usr/bin/node
+// a script that prints all characters of a Star Wars movie
 
 const request = require('request');
 
-request(`https://swapi-api.alx-tools.com/api/films/${process.argv[2]}`, async (error, response, body) => {
-  if (!error && response.statusCode === 200) {
-    const chars = JSON.parse(body).characters;
-    for (const character of chars) {
-      const p = new Promise((resolve, reject) => {
-        request(character, function (error, response, body) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(JSON.parse(body).name);
-          }
+async function processRequest (url) {
+  return new Promise((resolve, reject) => {
+    request(url, function (error, response, body) {
+      if (error) {
+        reject(error);
+      }
+      resolve({ response, body });
+    });
+  });
+}
+
+async function main () {
+  if (process.argv.length > 2) {
+    const id = process.argv[2];
+    try {
+      const { body } = await processRequest(
+        `https://swapi-api.alx-tools.com/api/films/${id}`
+      );
+
+      const characters = JSON.parse(body).characters;
+      if (characters.length > 0) {
+        const downloadPromises = characters.map(async (url) => {
+          const { body } = await processRequest(url);
+          return JSON.parse(body).name;
         });
-      });
-      console.log(await p);
+        const result = await Promise.all(downloadPromises);
+        console.log(result.join('\n'));
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
-});
+}
+main()
+  .then(() => null)
+  .catch((error) => console.log('script failed', error));
