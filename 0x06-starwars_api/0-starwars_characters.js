@@ -1,4 +1,3 @@
-111
 #!/usr/bin/node
 
 const request = require('request');
@@ -19,4 +18,4 @@ request(`https://swapi-api.alx-tools.com/api/films/${process.argv[2]}`, async (e
       console.log(await p);
     }
   }
-});:wq
+});
